@@ -1,0 +1,47 @@
+<main class="menu-page">
+  <section class="page container">
+    <header class="hero">
+      <p class="eyebrow">Les saveurs du Maroc</p>
+      <h1>Notre <span>carte</span></h1>
+      <p class="subtitle">
+        Des recettes généreuses, préparées avec soin et pensées pour être partagées.
+      </p>
+      <a class="menu-cta" routerLink="/">Découvrir Dar Dmana <span aria-hidden="true">↓</span></a>
+    </header>
+
+    <section id="catalogue" class="grid" aria-label="Catégories de plats" aria-live="polite">
+      @if (loading()) {
+        <p class="status">Chargement des catégories...</p>
+      } @else if (errorMessage()) {
+        <p class="status error" role="alert">{{ errorMessage() }}</p>
+      } @else if (categories().length === 0) {
+        <p class="status">Aucune catégorie n'est disponible pour le moment.</p>
+      } @else {
+        @for (category of categories(); track category.id) {
+          <a
+            class="card"
+            [routerLink]="['/plats', category.id]"
+            [queryParams]="{ category: category.title }"
+          >
+            <div class="card-img">
+              <img [src]="category.image" [alt]="category.title" loading="lazy" />
+              <span class="badge">
+                {{ category.count }} plat{{ category.count === 1 ? '' : 's' }}
+              </span>
+              <span class="card-img__arrow" aria-hidden="true">↗</span>
+            </div>
+            <div class="card-body">
+              <div>
+                <h2>{{ category.title }}</h2>
+                @if (category.description) {
+                  <p class="description">{{ category.description }}</p>
+                }
+              </div>
+              <span class="card-body__link">Explorer</span>
+            </div>
+          </a>
+        }
+      }
+    </section>
+  </section>
+</main>
